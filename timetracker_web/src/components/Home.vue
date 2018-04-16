@@ -38,6 +38,7 @@
             </div>
         </b-card>
       </b-card-group>
+      <Loading msg='loading test'></Loading>
     </p>
   </div>
 </template>
@@ -78,7 +79,8 @@ export default {
       second: 0,
       state: Const.STATES.stopped,
       columns: Const.COLUMNS,
-      tasks: ['学习股票', '研究Spring', '翻译', '研究NodeJS', '看电视', '研究NBA', '研究大数据', '后台开发']
+      tasks: ['学习股票', '研究Spring', '翻译', '研究NodeJS', '看电视', '研究NBA', '研究大数据', '后台开发',
+        '学习股票', '研究Spring', '翻译', '研究NodeJS', '看电视', '研究NBA', '研究大数据', '后台开发']
     }
   },
   methods: {
