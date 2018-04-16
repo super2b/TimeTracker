@@ -2,7 +2,7 @@
   <div>
     <p v-for='i in taskRowLength (tasks)' :key="i">
       <b-card-group columns v-if="i < taskRowLength(tasks)">
-        <b-card v-for='j in 3' :title="tasks[(i-1) * 3 + j - 1]" :key="j" header-tag="header">
+        <b-card v-for='j in columns' :title="tasks[(i-1) * columns + j - 1]" :key="j" header-tag="header">
             <p class="card-text">
               <span>{{ min }}</span>:<span>{{ sec }}</span>
             </p>
@@ -21,7 +21,7 @@
       </b-card-group>
       <!-- 处理最后一行 -->
       <b-card-group columns v-if="i === taskRowLength(tasks)">
-        <b-card v-for='k in (tasks.length % 3)' :key="k" :title="tasks[(i - 1) * 3 + k - 1]" header-tag="header">
+        <b-card v-for='k in (tasks.length % columns)' :key="k" :title="tasks[(i - 1) * columns + k - 1]" header-tag="header">
             <p class="card-text">
               <span>{{ min }}</span>:<span>{{ sec }}</span>
             </p>
@@ -77,6 +77,7 @@ export default {
       minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
       second: 0,
       state: Const.STATES.stopped,
+      columns: Const.COLUMNS,
       tasks: ['学习股票', '研究Spring', '翻译', '研究NodeJS', '看电视', '研究NBA', '研究大数据', '后台开发']
     }
   },
@@ -114,10 +115,10 @@ export default {
       var len = ts.length
       console.log('the length:' + len)
       var res = 0
-      if (len / 3 > 1) {
-        res = parseInt(len / 3) + 1
+      if (len / this.columns > 1) {
+        res = parseInt(len / this.columns) + 1
       } else {
-        res = parseInt(len / 3)
+        res = parseInt(len / this.columns)
       }
       return res
     }
