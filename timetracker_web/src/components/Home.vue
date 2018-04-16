@@ -21,7 +21,7 @@
       </b-card-group>
       <!-- 处理最后一行 -->
       <b-card-group columns v-if="i === taskRowLength(tasks)">
-        <b-card style='flex:1 1 2' v-for='k in (tasks.length % 3)' :key="k" :title="tasks[(i - 1) * 3 + k - 1]" header-tag="header">
+        <b-card v-for='k in (tasks.length % 3)' :key="k" :title="tasks[(i - 1) * 3 + k - 1]" header-tag="header">
             <p class="card-text">
               <span>{{ min }}</span>:<span>{{ sec }}</span>
             </p>
