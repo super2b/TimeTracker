@@ -1,22 +1,44 @@
 <template>
   <div>
-    <h2>
-      <span>Task1</span>
-      <b-button :disabled="state==='started'" @click="start()">
-        <font-awesome-icon :icon="playIcon"/>
-      </b-button>
-      <b-button :disabled="state!=='started'" @click="pause()">
-        <font-awesome-icon :icon="pauseIcon"/>
-      </b-button>
-      <b-button :disabled="state!=='started'" @click="stop()">
-        <font-awesome-icon :icon="stopIcon"/>
-      </b-button>
-    </h2>
-    <div class="card card-body bg-light">
-      <div class="pomodoro-timer">
-        <span>{{ min }}</span>:<span>{{ sec }}</span>
-      </div>
-    </div>
+    <p v-for='i in taskRowLength (tasks)' :key="i">
+      <b-card-group deck v-if="i < taskRowLength(tasks)">
+        <b-card  v-for='j in 3' :title="tasks[(i-1) * 3 + j - 1]" :key="j" header-tag="header">
+            <p class="card-text">
+              <span>{{ min }}</span>:<span>{{ sec }}</span>
+            </p>
+            <div>
+              <b-button :disabled="state==='started'" @click="start()">
+                <font-awesome-icon :icon="playIcon"/>
+              </b-button>
+              <b-button :disabled="state!=='started'" @click="pause()">
+                <font-awesome-icon :icon="pauseIcon"/>
+              </b-button>
+              <b-button :disabled="state!=='started'" @click="stop()">
+                <font-awesome-icon :icon="stopIcon"/>
+              </b-button>
+            </div>
+        </b-card>
+      </b-card-group>
+      <!-- 处理最后一行 -->
+      <b-card-group deck v-if="i === taskRowLength(tasks)">
+        <b-card v-for='k in (tasks.length % 3)' :key="k" :title="tasks[(i - 1) * 3 + k - 1]" header-tag="header">
+            <p class="card-text">
+              <span>{{ min }}</span>:<span>{{ sec }}</span>
+            </p>
+            <div>
+              <b-button :disabled="state==='started'" @click="start()">
+                <font-awesome-icon :icon="playIcon"/>
+              </b-button>
+              <b-button :disabled="state!=='started'" @click="pause()">
+                <font-awesome-icon :icon="pauseIcon"/>
+              </b-button>
+              <b-button :disabled="state!=='started'" @click="stop()">
+                <font-awesome-icon :icon="stopIcon"/>
+              </b-button>
+            </div>
+        </b-card>
+      </b-card-group>
+    </p>
   </div>
 </template>
 <script>
@@ -37,13 +59,13 @@ export default {
     stopIcon () {
       return faStop
     },
-    min: function () {
+    min () {
       if (this.minute < 10) {
         return '0' + this.minute
       }
       return this.minute
     },
-    sec: function () {
+    sec () {
       if (this.second < 10) {
         return '0' + this.second
       }
@@ -54,7 +76,8 @@ export default {
     return {
       minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
       second: 0,
-      state: Const.STATES.stopped
+      state: Const.STATES.stopped,
+      tasks: ['学习股票', '研究Spring', '翻译', '研究NodeJS', '看电视', '研究NBA', '研究大数据']
     }
   },
   methods: {
@@ -86,6 +109,17 @@ export default {
       if (this.second === 0 && this.minute === 0) {
         this.state = Const.STATES.STOPPED
       }
+    },
+    taskRowLength: function (ts) {
+      var len = ts.length
+      console.log('the length:' + len)
+      var res = 0
+      if (len / 3 > 1) {
+        res = parseInt(len / 3) + 1
+      } else {
+        res = parseInt(len / 3)
+      }
+      return res
     }
   },
   components: {

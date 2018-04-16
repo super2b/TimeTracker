@@ -14,12 +14,8 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <div class="container">
-      <div class="col-sm-3">
-      </div>
-      <div class="col-sm-9">
-        <router-view></router-view>
-      </div>
-    </div>
+    <p class="container">
+      <router-view></router-view>
+    </p>
   </div>
 </template>
