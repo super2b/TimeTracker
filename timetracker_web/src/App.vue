@@ -14,7 +14,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <p class="container">
+    <p class="container" style="margin-top: 20px">
       <router-view></router-view>
     </p>
   </div>
