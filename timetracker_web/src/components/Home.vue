@@ -2,7 +2,11 @@
   <div>
     <p v-for='i in taskRowLength (tasks)' :key="i">
       <b-card-group columns>
-        <Card v-for="j in columns" v-if="(i-1)*columns + (j - 1) < tasks.length" :key="(i-1)*columns + (j - 1)" :title="tasks[(i-1)*columns + (j - 1)]"></Card>
+        <Card v-for="j in columns"
+              v-if="(i-1)*columns + (j - 1) < tasks.length"
+              :key="(i-1)*columns + (j - 1)"
+              :title="tasks[(i-1)*columns + (j - 1)]">
+        </Card>
       </b-card-group>
       <Loading msg='loading test'></Loading>
     </p>

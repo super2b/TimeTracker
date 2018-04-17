@@ -55,7 +55,7 @@ export default {
   data () {
     return {
       minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
-      second: 0,
+      second: Const.WORKING_TIME_LENGTH_IN_SECONDS,
       state: Const.STATES.stopped
     }
   },
@@ -72,7 +72,7 @@ export default {
     stop: function () {
       clearInterval(this.interval)
       this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
-      this.second = 0
+      this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
       this.state = Const.STATES.STOPPED
     },
     _tick: function () {
@@ -86,6 +86,9 @@ export default {
         return
       }
       if (this.second === 0 && this.minute === 0) {
+        clearInterval(this.interval)
+        this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
+        this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
         this.state = Const.STATES.STOPPED
       }
     }
