@@ -1,6 +1,6 @@
 <template>
   <div id="wrapper">
-    <b-navbar toggleable="md" type="dark" variant="info">
+    <b-navbar toggleable="md" type="dark" variant="info" sticky=True>
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-navbar-brand href="#">Time Tracker</b-navbar-brand>
       <b-collapse is-nav id="nav_collapse">
