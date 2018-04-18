@@ -2,15 +2,14 @@
   <div>
     <div style="margin-bottom: 20px" >
       <div>
-       <b-form-textarea id="textarea1"
+       <b-form-input id="textarea1"
             v-model="text"
             form-control
-            placeholder="Enter something"
-            :rows="2"
-            :max-rows="2">
-        </b-form-textarea>
-        <div class="text-right">
-          <b-button variant="primary" style="margin-top: 10px">
+            :placeholder="formplaceholder"
+            :state="formstate">
+        </b-form-input>
+        <div>
+          <b-button variant="primary" @click="postTask()" style="margin-top: 10px">
             添加
           </b-button>
         </div>
@@ -40,12 +39,14 @@ export default {
       columns: Const.COLUMNS,
       tasks: [
         {title: '学习股票', state: Const.STATES.STOPPED},
-        {title: '研究Spring', state: Const.STATES.STARTED},
+        {title: '研究Spring', state: Const.STATES.STOPPED},
         {title: '翻译', state: Const.STATES.STOPPED},
         {title: '研究NodeJS', state: Const.STATES.STOPPED}],
       size: 'sm',
       variant: 'primary',
-      text: ''
+      formstate: '',
+      text: '',
+      formplaceholder: 'Enter something'
     }
   },
   methods: {
@@ -59,6 +60,22 @@ export default {
       }
       console.log('the length:' + res)
       return res
+    },
+    postTask: function () {
+      if (!this.text) {
+        var self = this
+        self.formstate = 'invalid'
+        self.formplaceholder = 'Please enter content before post'
+        setTimeout(function () {
+          self.formstate = ''
+          self.formplaceholder = 'Enter something....'
+          console.log('2000laterrrrr')
+        }, 2000)
+      } else {
+        this.formstate = ''
+        this.tasks.unshift({title: this.text, state: Const.STATES.STOPPED})
+        this.text = ''
+      }
     }
   }
 }
