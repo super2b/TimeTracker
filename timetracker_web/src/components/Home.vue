@@ -1,14 +1,28 @@
 <template>
   <div>
+    <div style="margin-bottom: 20px" >
+      <b-form-textarea id="textarea1"
+          v-model="text"
+          placeholder="添加任务"
+          :rows="1"
+          :max-rows="6">
+      </b-form-textarea>
+      <b-button :size="size" :variant="variant" style="margin-top: 10px;">
+          添加
+      </b-button>
+    </div>
     <p v-for='i in taskRowLength (tasks)' :key="i">
       <b-card-group columns>
         <Card v-for="j in columns"
               v-if="(i-1)*columns + (j - 1) < tasks.length"
               :key="(i-1)*columns + (j - 1)"
-              :title="tasks[(i-1)*columns + (j - 1)]">
+              :index="(i-1)*columns + (j - 1)"
+              :data="tasks">
         </Card>
       </b-card-group>
+      <!--
       <Loading msg='loading test'></Loading>
+      -->
     </p>
   </div>
 </template>
@@ -19,7 +33,13 @@ export default {
   data () {
     return {
       columns: Const.COLUMNS,
-      tasks: ['学习股票', '研究Spring', '翻译', '研究NodeJS']
+      tasks: [
+        {title: '学习股票', state: Const.STATES.STOPPED},
+        {title: '研究Spring', state: Const.STATES.STARTED},
+        {title: '翻译', state: Const.STATES.STOPPED},
+        {title: '研究NodeJS', state: Const.STATES.STOPPED}],
+      size: 'sm',
+      variant: 'primary'
     }
   },
   methods: {

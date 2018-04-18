@@ -1,17 +1,17 @@
 <template>
   <div>
-    <b-card :title="title" header-tag="header">
+    <b-card :title="data[index].title" header-tag="header">
       <p class="card-text">
         <span>{{ min }}</span>:<span>{{ sec }}</span>
       </p>
       <div>
-        <b-button :disabled="state==='started'" @click="start()">
+        <b-button :disabled="data[index].state==='started'" @click="start(index)">
           <font-awesome-icon :icon="playIcon"/>
         </b-button>
-        <b-button :disabled="state!=='started'" @click="pause()">
+        <b-button :disabled="data[index].state!=='started'" @click="pause()">
           <font-awesome-icon :icon="pauseIcon"/>
         </b-button>
-        <b-button :disabled="state!=='started'" @click="stop()">
+        <b-button :disabled="data[index].state!=='started'" @click="stop()">
           <font-awesome-icon :icon="stopIcon"/>
         </b-button>
       </div>
@@ -27,7 +27,17 @@ import Const from '../Constant'
 export default {
   name: 'CardItem',
   props: {
-    title: String
+    index: Number,
+    data: Array
+  },
+  mounted: function () {
+    this.$nextTick(function () {
+      // Code that will run only after the
+      // entire view has been rendered
+      if (this.data[this.index].state === Const.STATES.STARTED) {
+        this.start(this.index)
+      }
+    })
   },
   computed: {
     playIcon () {
@@ -55,27 +65,47 @@ export default {
   data () {
     return {
       minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
-      second: Const.WORKING_TIME_LENGTH_IN_SECONDS,
-      state: Const.STATES.stopped
+      second: Const.WORKING_TIME_LENGTH_IN_SECONDS
     }
   },
   methods: {
-    start: function () {
+    start: function (index) {
       this._tick()
+      if (this.data) {
+        for (var d in this.data) {
+          console.log(this.data[d])
+          if (this.data[d].state === Const.STATES.STARTED) {
+            console.log('update state:' + d)
+            this.data[d].state = Const.STATES.PAUSED
+          } else {
+            console.log('note update state')
+          }
+        }
+        this.data[this.index].state = Const.STATES.STARTED
+      }
+      console.log('the index:' + index)
       this.interval = setInterval(this._tick, 1000)
-      this.state = Const.STATES.STARTED
+      this.data[this.index].state = Const.STATES.STARTED
     },
     pause: function () {
-      this.state = Const.STATES.PAUSED
+      this.data[this.index].state = Const.STATES.PAUSED
       clearInterval(this.interval)
     },
     stop: function () {
       clearInterval(this.interval)
       this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
       this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
-      this.state = Const.STATES.STOPPED
+      this.data[this.index].state = Const.STATES.STOPPED
     },
     _tick: function () {
+      console.log('index:' + this.index + ', state:' + this.data[this.index].state)
+      if (this.data[this.index].state === Const.STATES.STOPPED) {
+        this.stop()
+        return
+      } else if (this.data[this.index].state === Const.STATES.PAUSED) {
+        this.pause()
+        return
+      }
       if (this.second !== 0) {
         this.second--
         return
@@ -89,7 +119,7 @@ export default {
         clearInterval(this.interval)
         this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
         this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
-        this.state = Const.STATES.STOPPED
+        this.data[this.index].state = Const.STATES.STOPPED
       }
     }
   },
