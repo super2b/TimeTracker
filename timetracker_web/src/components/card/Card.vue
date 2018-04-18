@@ -2,7 +2,7 @@
   <div>
     <b-card :title="data[index].title" header-tag="header">
       <p class="card-text">
-        <span>{{ min }}</span>:<span>{{ sec }}</span>
+        <span>{{ hou }}</span>:<span>{{ min }}</span>:<span>{{ sec }}</span>
       </p>
       <div>
         <b-button :disabled="data[index].state==='started'" @click="start(index)">
@@ -56,6 +56,12 @@ export default {
     deleteIcon () {
       return faDelete
     },
+    hou () {
+      if (this.hour < 10) {
+        return '0' + this.hour
+      }
+      return this.hour
+    },
     min () {
       if (this.minute < 10) {
         return '0' + this.minute
@@ -71,6 +77,7 @@ export default {
   },
   data () {
     return {
+      hour: 0,
       minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
       second: Const.WORKING_TIME_LENGTH_IN_SECONDS
     }
@@ -119,21 +126,25 @@ export default {
         this.pause()
         return
       }
-      if (this.second !== 0) {
-        this.second--
+      if (this.second < 59) {
+        this.second++
         return
       }
-      if (this.minute !== 0) {
-        this.minute--
-        this.second = 59
-        return
+      if (this.second >= 59) {
+        if (this.minute >= 59) {
+          this.hour++
+          this.minute = 0
+        } else {
+          this.minute++
+        }
+        this.second = 0
       }
-      if (this.second === 0 && this.minute === 0) {
-        clearInterval(this.interval)
-        this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
-        this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
-        this.data[this.index].state = Const.STATES.STOPPED
-      }
+      // if (this.second === 0 && this.minute === 0) {
+      //   clearInterval(this.interval)
+      //   this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
+      //   this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
+      //   this.data[this.index].state = Const.STATES.STOPPED
+      // }
     }
   },
   components: {
