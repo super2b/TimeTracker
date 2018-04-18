@@ -1,15 +1,20 @@
 <template>
   <div>
     <div style="margin-bottom: 20px" >
-      <b-form-textarea id="textarea1"
-          v-model="text"
-          placeholder="添加任务"
-          :rows="1"
-          :max-rows="6">
-      </b-form-textarea>
-      <b-button :size="size" :variant="variant" style="margin-top: 10px;">
-          添加
-      </b-button>
+      <div>
+       <b-form-textarea id="textarea1"
+            v-model="text"
+            form-control
+            placeholder="Enter something"
+            :rows="2"
+            :max-rows="2">
+        </b-form-textarea>
+        <div class="text-right">
+          <b-button variant="primary" style="margin-top: 10px">
+            添加
+          </b-button>
+        </div>
+      </div>
     </div>
     <p v-for='i in taskRowLength (tasks)' :key="i">
       <b-card-group columns>
@@ -39,7 +44,8 @@ export default {
         {title: '翻译', state: Const.STATES.STOPPED},
         {title: '研究NodeJS', state: Const.STATES.STOPPED}],
       size: 'sm',
-      variant: 'primary'
+      variant: 'primary',
+      text: ''
     }
   },
   methods: {
