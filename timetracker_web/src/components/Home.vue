@@ -59,7 +59,7 @@ export default {
         res = parseInt(len / this.columns)
       }
       console.log('the length:' + res)
-      return res
+      return len > 0 ? Math.max(res, 1) : res
     },
     postTask: function () {
       if (!this.text) {

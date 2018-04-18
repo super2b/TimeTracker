@@ -11,8 +11,11 @@
         <b-button :disabled="data[index].state!=='started'" @click="pause()">
           <font-awesome-icon :icon="pauseIcon"/>
         </b-button>
-        <b-button :disabled="data[index].state!=='started'" @click="stop()">
-          <font-awesome-icon :icon="stopIcon"/>
+        <b-button @click="stop()">
+          <font-awesome-icon :icon="doneIcon"/>
+        </b-button>
+        <b-button @click="deleteTask()">
+          <font-awesome-icon :icon="deleteIcon"/>
         </b-button>
       </div>
     </b-card>
@@ -22,7 +25,8 @@
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 import faPlay from '@fortawesome/fontawesome-free-solid/faPlay'
 import faPause from '@fortawesome/fontawesome-free-solid/faPause'
-import faStop from '@fortawesome/fontawesome-free-solid/faStop'
+import faDone from '@fortawesome/fontawesome-free-solid/faCheck'
+import faDelete from '@fortawesome/fontawesome-free-solid/faTrashAlt'
 import Const from '../Constant'
 export default {
   name: 'CardItem',
@@ -46,8 +50,11 @@ export default {
     pauseIcon () {
       return faPause
     },
-    stopIcon () {
-      return faStop
+    doneIcon () {
+      return faDone
+    },
+    deleteIcon () {
+      return faDelete
     },
     min () {
       if (this.minute < 10) {
@@ -96,6 +103,12 @@ export default {
       this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
       this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
       this.data[this.index].state = Const.STATES.STOPPED
+    },
+    deleteTask: function () {
+      clearInterval(this.interval)
+      console.log('delete index:' + this.index)
+      this.data.splice(this.index, 1)
+      console.log(this.data)
     },
     _tick: function () {
       console.log('index:' + this.index + ', state:' + this.data[this.index].state)
