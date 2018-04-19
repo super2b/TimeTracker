@@ -6,7 +6,7 @@
     </p>
     -->
     <div class="container-fluid">
-      <div class="row">
+      <div class="row" style="min-height:calc(100vh);">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sticky-top sticky-offset">
             <ul class="nav flex-column">
