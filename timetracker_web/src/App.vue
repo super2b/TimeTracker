@@ -7,7 +7,7 @@
     -->
     <div class="container-fluid">
       <div class="row" style="min-height:calc(100vh);">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar navbar-custom">
           <div class="sticky-top sticky-offset">
             <ul class="nav flex-column">
               <div class="nav-item" style="height:60px" />
@@ -74,3 +74,8 @@
     </b-navbar>
   </div>
 </template>
+<style>
+  .bg-info {
+    background-color: #367bff !important;
+  }
+</style>
