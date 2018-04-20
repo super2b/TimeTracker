@@ -38,15 +38,15 @@ export default {
     return {
       columns: Const.COLUMNS,
       tasks: [
-        {title: '学习股票', state: Const.STATES.STOPPED},
-        {title: '研究Spring', state: Const.STATES.STOPPED},
-        {title: '翻译', state: Const.STATES.STOPPED},
-        {title: '研究NodeJS', state: Const.STATES.STOPPED}],
+        {title: 'Heroku', state: Const.STATES.STOPPED},
+        {title: 'SendGrid', state: Const.STATES.STOPPED},
+        {title: 'Netlify', state: Const.STATES.STOPPED},
+        {title: 'Namecheap', state: Const.STATES.STOPPED}],
       size: 'sm',
       variant: 'primary',
       formstate: '',
       text: '',
-      formplaceholder: 'Enter something'
+      formplaceholder: '输入任务内容'
     }
   },
   methods: {
@@ -65,10 +65,10 @@ export default {
       if (!this.text) {
         var self = this
         self.formstate = 'invalid'
-        self.formplaceholder = 'Please enter content before post'
+        self.formplaceholder = '内容不能为空'
         setTimeout(function () {
           self.formstate = ''
-          self.formplaceholder = 'Enter something....'
+          self.formplaceholder = '输入任务内容'
           console.log('2000laterrrrr')
         }, 2000)
       } else {
