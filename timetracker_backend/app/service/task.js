@@ -2,10 +2,7 @@ const Service = require('egg').Service;
 
 class TaskService extends Service {
   async find(tid) {
-    const task = {
-      content: 'first task',
-      create_time: '2018-04-24'
-    };
+    const task = await this.app.mysql.get('tasks', {id: tid})
     return task;
   } 
 }
