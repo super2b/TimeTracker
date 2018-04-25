@@ -5,11 +5,8 @@ const Controller = require('egg').Controller;
 class TaskController extends Controller {
   async create() {
     const {ctx, service} = this;
-    console.log(ctx.request.body)
-    ctx.body = {
-      status : 'success',
-      msg: "get the result list."
-    }
+    var insertResult = await service.task.insert('研究Heroku', "Task from api")
+    ctx.body = insertResult;
     ctx.status = 201;
   }
 

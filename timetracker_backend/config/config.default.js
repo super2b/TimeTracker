@@ -10,15 +10,15 @@ module.exports = appInfo => {
     mysql: {
       client: {
         // host
-        host: 'localhost',
+        host: '192.168.0.105',
         // 端口号
         port: '3306',
         // 用户名
-        user: 'root',
+        user: 'client_web',
         // 密码
-        password: '******',
+        password: '123456',
         // 数据库名
-        database: 'test',
+        database: 'timetracker',
       },
       // 是否加载到 app 上，默认开启
       app: true,
