@@ -6,4 +6,9 @@
 exports.mysql = {
   enable: true,
   package: 'egg-mysql'
-}
+};
+
+exports.oAuth2Server = {
+  enable: true,
+  package: 'egg-oauth2-server',
+};
