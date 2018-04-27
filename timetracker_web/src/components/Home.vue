@@ -38,10 +38,10 @@ export default {
     return {
       columns: Const.COLUMNS,
       tasks: [
-        {title: 'Heroku', state: Const.STATES.STOPPED},
-        {title: 'SendGrid', state: Const.STATES.STOPPED},
-        {title: 'Netlify', state: Const.STATES.STOPPED},
-        {title: 'Namecheap', state: Const.STATES.STOPPED}],
+        {title: 'Android组件化', state: Const.STATES.STOPPED, url: 'https://blog.csdn.net/guiying712/article/details/78057120'},
+        {title: 'Android 动态代理和AOP', state: Const.STATES.STOPPED},
+        {title: 'Android包结构详解', state: Const.STATES.STOPPED},
+        {title: 'ARouter代码阅读', state: Const.STATES.STOPPED}],
       size: 'sm',
       variant: 'primary',
       formstate: '',
