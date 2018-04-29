@@ -10,7 +10,7 @@ module.exports = appInfo => {
     mysql: {
       client: {
         // host
-        host: '192.168.0.105',
+        host: '192.168.0.103',
         // 端口号
         port: '3306',
         // 用户名
