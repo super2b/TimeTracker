@@ -66,3 +66,6 @@ dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
 ```
 sudo service mysql start|stop|restrat|status
 ```
+
+#### Redis
+可以任意ip地址访问redis->修改/etc/redis/redis.conf里面的bind 127.0.0.1这一样注释即可。

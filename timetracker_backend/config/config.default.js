@@ -24,6 +24,14 @@ module.exports = appInfo => {
       app: true,
       // 是否加载到 agent 上，默认关闭
       agent: false,
+    },
+    redis: {
+      client: {
+        port: 6379,
+        host: '192.168.0.103',
+        password: '123456',
+        db: 0
+      }
     }
   };
 

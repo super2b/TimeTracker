@@ -8,7 +8,12 @@ exports.mysql = {
   package: 'egg-mysql'
 };
 
-exports.oAuth2Server = {
+// exports.oAuth2Server = {
+//   enable: true,
+//   package: 'egg-oauth2-server',
+// };
+
+exports.redis = {
   enable: true,
-  package: 'egg-oauth2-server',
-};
+  package: 'egg-redis'
+}
