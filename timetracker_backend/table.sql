@@ -18,6 +18,7 @@ create table access_token(
     update_time datetime not null default now()
 ) DEFAULT CHARSET=utf8;
 
+
 create table authorization_code(
     c_id bigint(20) primary key auto_increment,
     code varchar(128) not null,
@@ -41,6 +42,11 @@ create table client(
 create table refresh_token(
     t_id bigint(20) primary key auto_increment,
     refresh_token varchar(128) not null,
+)
+
+create table refresh_token(
+    t_id bigint(20) primary key auto_increment,
+    refresh_token varchar(128) not nll,
     refresh_token_expiresat datetime not null,
     scope varchar(512),
     client_id bigint(20),
