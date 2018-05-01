@@ -6,6 +6,11 @@ class UserService extends Service {
       'userId': '1'
     }
   }
+
+  async createUser(username, password) {
+    const result = await this.app.mysql.insert('user', {name: username, hashed_password: password})
+    return result;
+  }
 }
 
 module.exports = UserService;

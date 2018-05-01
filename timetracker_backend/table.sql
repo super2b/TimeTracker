@@ -7,6 +7,18 @@ create table task(
     update_time datetime not null default now()
 ) DEFAULT CHARSET=utf8;
 
+create table user(
+    u_id bigint(20) primary key auto_increment,
+    name varchar(32),
+    hashed_password varchar(128),
+    age int,
+    first_name varchar(32),
+    last_name varchar(32),
+    last_sign_at datetime not null default now(),
+    create_time datetime not null default now(),
+    update_time datetime not null default now()
+) DEFAULT CHARSET=utf8;
+
 create table access_token(
     t_id  bigint(20) primary key auto_increment,
     accesstoken varchar(128) not null,
@@ -55,16 +67,4 @@ create table refresh_token(
     update_time datetime not null default now()
 ) DEFAULT CHARSET=utf8;
 
-create table user(
-    u_id bigint(20) primary key auto_increment,
-    name varchar(32),
-    hashed_password varchar(128),
-    password_reset_token varchar(128),
-    refresh_token_expiredat datetime not null,
-    age int,
-    first_name varchar(32),
-    last_name varchar(32),
-    last_sign_at datetime,
-    create_time datetime not null default now(),
-    update_time datetime not null default now()
-) DEFAULT CHARSET=utf8;
+

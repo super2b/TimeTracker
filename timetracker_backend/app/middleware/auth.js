@@ -2,34 +2,43 @@
 
 module.exports = () => {
   return async function auth(ctx, next) {
-    const authorization = ctx.request.headers/authorization;
+    const authorization = ctx.request.headers.authorization;
     if (!authorization) {
+      ctx.body = {
+        status: 403,
+        success: false,
+        msg: 'token错误'
+      }
       return;
     }
-    const toekn = authorization.slice(7)
+    console.log(authorization)
+    const token = authorization.slice(7)
+
     const jwtToken = ctx.app.jwt.decode(token, ctx.app.config.jwt.secret);
     if (!jwtToken) {
       ctx.body = {
         status: 403,
         success: false,
-        msg: 'token 错误'
+        msg: 'token错误'
       }
       return;
     }
 
-    if (jwtToken.exp < Date.now()) {
+    console.log('expire:' + jwtToken.exp + ", now:" + Date.now()/1000);
+    if (jwtToken.exp < Date.now() / 1000) {
       ctx.body = {
         status : 403,
         success: false,
         msg: 'token过期'
       }
+      return;
     }
-    return;
+    
+    console.log(jwtToken._id)
+    ctx.current_user = await ctx.app.mysql.get('user', {u_id: jwtToken._id});
+    if (!ctx.current_user) {
+      throw  throwBizError('USER_NOT_FOUND')
+    }
+    await next();
   }
-
-  ctx.current_user = await ctx.app.find('user', {uid: jwtToken.iss});
-  if (!ctx.current_user) {
-    throw  throwBizError('USER_NOT_FOUND')
-  }
-  await next();
 }
