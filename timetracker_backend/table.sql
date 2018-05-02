@@ -1,5 +1,6 @@
 create table task(
     t_id bigint(20) primary key auto_increment,
+    u_id bigint(20) not null,
     t_name varchar(128) not null,
     t_desc varchar(512),
     t_status int not null default '0',
