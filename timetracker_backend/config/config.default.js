@@ -46,10 +46,26 @@ module.exports = appInfo => {
   config.jwttoken = {
     expire_in_min: '10m',
     expire_in_sec: 10 * 60
+  };
+
+  config.onerror = {
+    all(err, ctx) {
+      // json hander
+      ctx.body = { 
+        success: false,
+        msg: 'server error',
+       };
+      ctx.status = 500;
+    },
+    accepts(ctx) {
+      return 'json'
+    }
   }
+  
   config.salt_bounds = 10
   // add your config here
   config.middleware = [];
   return config;
 };
+
 
