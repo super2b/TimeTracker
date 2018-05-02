@@ -51,10 +51,17 @@ module.exports = appInfo => {
   config.onerror = {
     all(err, ctx) {
       // json hander
-      ctx.body = { 
-        success: false,
-        msg: 'server error',
-       };
+      if (ctx.status === 403) {
+        ctx.body = { 
+          success: false,
+          msg: err.message,
+         };
+      } else {
+        ctx.body = { 
+          success: false,
+          msg: 'server error',
+         };
+      }
     },
     accepts(ctx) {
       return 'json'
