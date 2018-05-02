@@ -55,7 +55,6 @@ module.exports = appInfo => {
         success: false,
         msg: 'server error',
        };
-      ctx.status = 500;
     },
     accepts(ctx) {
       return 'json'
@@ -64,7 +63,7 @@ module.exports = appInfo => {
   
   config.salt_bounds = 10
   // add your config here
-  config.middleware = [];
+  config.middleware = ['errorHandler'];
   return config;
 };
 
