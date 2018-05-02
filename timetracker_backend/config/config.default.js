@@ -47,7 +47,7 @@ module.exports = appInfo => {
     expire_in_min: '10m',
     expire_in_sec: 10 * 60
   }
-  config.salt_bounds = 10;
+  config.salt_bounds = 10
   // add your config here
   config.middleware = [];
   return config;

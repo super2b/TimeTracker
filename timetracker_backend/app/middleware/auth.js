@@ -26,8 +26,9 @@ module.exports = () => {
 
     console.log('expire:' + jwtToken.exp + ", now:" + Date.now()/1000);
     const cachedToken = await ctx.app.redis.get(jwtToken._id);
+    console.log('token from header:' + jwtToken)
     console.log('get the value from redis:' + cachedToken)
-    if (!cachedToken || jwtToken.exp < Date.now() / 1000) {
+    if (!cachedToken || cachedToken !== token || jwtToken.exp < Date.now() / 1000) {
       ctx.body = {
         status : 403,
         success: false,

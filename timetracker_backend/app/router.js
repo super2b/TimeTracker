@@ -11,9 +11,9 @@ module.exports = app => {
   router.get('/', controller.home.index);
 
   // 注册
-  router.post('/user', controller.user.signup) 
+  router.post('/signup', controller.user.signup) 
   // 登录
-  router.post('/user', controller.user.signin)
+  router.post('/signin', controller.user.signin)
 
   //获取任务列表
   // router.get('/task', auth, controller.task.list)

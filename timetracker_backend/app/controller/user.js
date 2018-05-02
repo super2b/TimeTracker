@@ -11,8 +11,14 @@ class UserController extends Controller {
     ctx.status = 200
   }
 
-  async singin() {
+  async signin() {
     const {ctx, service} = this;
+    const name = ctx.request.body.name;
+    const password = ctx.request.body.password;
+    const result = await service.user.findUser(name, password);
+    
+    ctx.body = result
+    ctx.status = 200;
     
   }
 }
