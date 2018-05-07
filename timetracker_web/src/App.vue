@@ -64,11 +64,24 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item href="#">Leiweibo</b-nav-item>
+          <b-nav-item href="#" @click='logout'>退出</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
   </div>
 </template>
+<script>
+export default {
+  methods: {
+    logout () {
+      console.log('execute logout()...')
+      this.delCookie('session')
+      this.$router.replace('/')
+      this.$router.go(0)
+    }
+  }
+}
+</script>
 <style>
   .bg-info {
     background-color: #367bff !important;

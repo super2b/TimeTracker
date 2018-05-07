@@ -15,6 +15,38 @@ Vue.use(Loading)
 Vue.use(Card)
 Vue.config.productionTip = false
 
+// 设置cookie,增加到vue实例方便全局调用
+// vue全局调用的理由是，有些组件所用到的接口可能需要session验证，session从cookie获取
+// 当然，如果session保存到vuex的话除外
+Vue.prototype.setCookie = (cName, value, expiredays) => {
+  var exdate = new Date()
+  exdate.setDate(exdate.getDate() + expiredays)
+  document.cookie = cName + '=' + escape(value) + ((expiredays == null) ? '' : ';expires=' + exdate.toGMTString())
+}
+
+// 获取cookie
+function getCookie (name) {
+  var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+  var arr = document.cookie.match(reg)
+  if (arr) {
+    return (arr[2])
+  } else {
+    return null
+  }
+}
+
+Vue.prototype.getCookie = getCookie
+
+// 删除cookie
+Vue.prototype.delCookie = (name) => {
+  var exp = new Date()
+  exp.setTime(exp.getTime() - 1)
+  var cval = getCookie(name)
+  if (cval != null) {
+    document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+  }
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -30,7 +62,9 @@ new Vue({
   },
   methods: {
     checkLogin () {
-      return false
+      var cookie = this.getCookie('session')
+      console.log('the exsted cookie:' + cookie)
+      return cookie
     }
   }
 })
