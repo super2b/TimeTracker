@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+import Login from './components/Login'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import Loading from '@/components/loading'
@@ -18,6 +19,18 @@ Vue.config.productionTip = false
 new Vue({
   el: '#app',
   router,
-  components: {App},
-  template: '<App/>'
+  render: function (h) {
+    var logined = this.checkLogin()
+    console.log('logined:' + logined)
+    if (logined) {
+      return (<App />)
+    } else {
+      return (<Login />)
+    }
+  },
+  methods: {
+    checkLogin () {
+      return false
+    }
+  }
 })
