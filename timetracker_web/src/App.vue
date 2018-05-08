@@ -63,7 +63,7 @@
       <b-collapse is-nav id="nav_collapse">
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item href="#">Leiweibo</b-nav-item>
+          <b-nav-item href="#">{{userName}}</b-nav-item>
           <b-nav-item href="#" @click='logout'>退出</b-nav-item>
         </b-navbar-nav>
       </b-collapse>
@@ -72,10 +72,15 @@
 </template>
 <script>
 export default {
+  data () {
+    return {
+      userName: this.getCookie('username')
+    }
+  },
   methods: {
     logout () {
       console.log('execute logout()...')
-      this.delCookie('session')
+      this.delCookie('username')
       this.$router.replace('/')
       this.$router.go(0)
     }

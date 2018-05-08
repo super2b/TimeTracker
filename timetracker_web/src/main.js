@@ -62,9 +62,9 @@ new Vue({
   },
   methods: {
     checkLogin () {
-      var cookie = this.getCookie('session')
-      console.log('the exsted cookie:' + cookie)
-      return cookie
+      var username = this.getCookie('username')
+      console.log('the existed user:' + username)
+      return username
     }
   }
 })
