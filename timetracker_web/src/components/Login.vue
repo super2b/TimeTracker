@@ -48,7 +48,7 @@ export default {
       // }
       var data = qs.stringify({'name': 'leiweibo111', 'password': '123456'})
       var vm = this
-      axios.post('http://localhost:7001/signin', data)
+      axios.post('/signin', data)
         .then(function (res) {
           console.log('the response:' + res.data.msg)
           let expireDays = 1000 * 60 * 60 * 24 * 15

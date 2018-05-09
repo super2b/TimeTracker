@@ -11,7 +11,7 @@ module.exports = appInfo => {
     mysql: {
       client: {
         // host
-        host: '192.168.7.59',
+        host: '192.168.3.55',
         // 端口号
         port: '3306',
         // 用户名
@@ -29,7 +29,7 @@ module.exports = appInfo => {
     redis: {
       client: {
         port: 6379,
-        host: '192.168.7.59',
+        host: '192.168.3.55',
         password: '123456',
         db: 0
       }
