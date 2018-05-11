@@ -7,7 +7,6 @@ import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import Loading from '@/components/loading'
 import Card from '@/components/card'
-import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -47,9 +46,7 @@ Vue.prototype.delCookie = (name) => {
     document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
   }
 }
-axios.defaults.baseURL = 'http://localhost:7001'
-axios.defaults.headers.common['Authorization'] = '1234234234234'
-Vue.prototype.$http = axios
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

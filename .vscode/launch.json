@@ -7,8 +7,19 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch via NPM",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 9229
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/timetracker_backend/app/controller/task.js"
+      "program": "npm run dev"
     }
   ]
 }

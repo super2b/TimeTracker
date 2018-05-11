@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import httpclient from '../httpclient.js'
 import qs from 'qs'
 export default {
   name: 'Login',
@@ -31,12 +31,12 @@ export default {
     login () {
       if (this.account !== '' && this.password !== '') {
         console.log('do login....')
-        this.toLogin(this.account, this.password)
+        this.doLogin(this.account, this.password)
       }
     },
 
     // 登录请求
-    toLogin (account, password) {
+    async doLogin (account, password) {
       // 一般要跟后端了解密码的加密规则
       // 这里例子用的哈希算法来自./js/sha1.min.js
       // let passwordSha = hex_sha1(hex_sha1(this.password))
@@ -47,19 +47,21 @@ export default {
       //   password_sha
       // }
       var data = qs.stringify({'name': 'leiweibo111', 'password': '123456'})
-      var vm = this
-      axios.post('/signin', data)
-        .then(function (res) {
-          console.log('the response:' + res.data.msg)
-          let expireDays = 1000 * 60 * 60 * 24 * 15
-          vm.setCookie('username', account, expireDays)
-          vm.isLoging = false
-          // vm.$router.replace('/home')
-          // 登录成功后
-          // vm.$router.go(0)
-        }).catch(function (err) {
-          console.log(err, '------------错误')
-        })
+      // var vm = this
+      // axios.post('/signin', data)
+      //   .then(function (res) {
+      //     console.log('the response:' + res.data.msg)
+      //     let expireDays = 1000 * 60 * 60 * 24 * 15
+      //     vm.setCookie('username', account, expireDays)
+      //     vm.isLoging = false
+      //     // vm.$router.replace('/home')
+      //     // 登录成功后
+      //     // vm.$router.go(0)
+      //   }).catch(function (err) {
+      //     console.log(err, '------------错误')
+      //   })
+      const loginResult = await httpclient.post('/signin', data)
+      console.log(loginResult.status)
       // 设置在登录状态
       // this.isLoging = true
       // // 演示用

@@ -2,11 +2,13 @@ const POMODORO_STATES = {
   WORK: 'work',
   REST: 'rest'
 }
+
 const STATES = {
   STARTED: 'started',
   STOPPED: 'stopped',
   PAUSED: 'paused'
 }
+
 const WORKING_TIME_LENGTH_IN_SECONDS = 58
 const RESTING_TIME_LENGTH_IN_MINUTES = 59
 const COLUMNS = 3

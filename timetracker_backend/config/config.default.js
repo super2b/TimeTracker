@@ -6,12 +6,12 @@ module.exports = appInfo => {
       csrf: {
         enable: false
       },
-      domainWhiteList: [ 'http://localhost:8080' ]
+      domainWhiteList: [ 'http://localhost:8081' ]
     },
     mysql: {
       client: {
         // host
-        host: '192.168.3.55',
+        host: '192.168.0.104',
         // 端口号
         port: '3306',
         // 用户名
@@ -29,7 +29,7 @@ module.exports = appInfo => {
     redis: {
       client: {
         port: 6379,
-        host: '192.168.3.55',
+        host: '192.168.0.104',
         password: '123456',
         db: 0
       }
