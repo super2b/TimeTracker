@@ -1,4 +1,4 @@
-const Service = require('egg').Service
+const Service = require('../core/base_service')
 const bcrypt = require('bcrypt')
 const Result = require('../model/result')
 
@@ -6,8 +6,9 @@ class UserService extends Service {
   async findUser(username, password) {
     const user = await this.app.mysql.get('user', {name: username})
     if (user) {
-      const hashedPassword = await bcrypt.hash(password, this.config.salt_bounds)
-      if (await bcrypt.compare(password, user.hashed_password)) {
+      const decryptedPassword = this.decryptPassword(password)
+      console.log('the real password:' + decryptedPassword)
+      if (await bcrypt.compare(decryptedPassword, user.hashed_password)) {
         const token  = await this.app.jwt.sign({_id: user.u_id}, this.config.jwt.secret, {
           expiresIn: this.config.jwttoken.expire_in_min
         })
@@ -44,7 +45,9 @@ class UserService extends Service {
     if (existedUser) {
       return new Result(false, '该用户名已经存在')
     }
-    const hashedPassword = await bcrypt.hash(password, this.config.salt_bounds)
+    const decryptedPassword = this.decryptPassword(password)
+    console.log('the real password when register:' + decryptedPassword)
+    const hashedPassword = await bcrypt.hash(decryptedPassword, this.config.salt_bounds)
     const result = await this.app.mysql.insert('user', 
       {name: username, hashed_password: hashedPassword, first_name: first_name, last_name: last_name})
     
