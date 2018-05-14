@@ -1,5 +1,6 @@
 const Service = require('egg').Service
 const bcrypt = require('bcrypt')
+const Result = require('../model/result')
 
 class UserService extends Service {
   async findUser(username, password) {
@@ -13,14 +14,12 @@ class UserService extends Service {
 
         await this.app.redis.set(user.u_id, token, 'EX', this.config.jwttoken.expire_in_sec);
         console.log('the new token is:' + token)
-        return {
-          msg: '登录成功'
-        }
+        let result = new Result(true, {}, '登录成功')
+        return result
       }
     }
-    return {
-      msg: '用户或者密码错误'
-    }
+    let result = new Result(false, {}, '用户或者密码错误')
+    return result
   }
 
   async createUser(username, password) {

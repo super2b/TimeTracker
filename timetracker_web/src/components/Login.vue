@@ -28,10 +28,20 @@ export default {
   },
   methods: {
     // 登录逻辑
-    login () {
+    async login () {
       if (this.account !== '' && this.password !== '') {
         console.log('do login....')
-        this.doLogin(this.account, this.password)
+        var data = qs.stringify({'name': this.account, 'password': this.password})
+        const loginResult = await httpclient.post('/signin', data)
+        const result = loginResult.data
+        console.log(loginResult.data)
+        if (result.success) {
+          let expireDays = 1000 * 60 * 60 * 24 * 15
+          this.setCookie('username', this.account, expireDays)
+          this.$router.replace('/home')
+          // 登录成功后
+          this.$router.go(0)
+        }
       }
     },
 
@@ -61,7 +71,7 @@ export default {
       //     console.log(err, '------------错误')
       //   })
       const loginResult = await httpclient.post('/signin', data)
-      console.log(loginResult.status)
+      console.log(loginResult.data)
       // 设置在登录状态
       // this.isLoging = true
       // // 演示用

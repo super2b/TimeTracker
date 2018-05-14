@@ -1,13 +1,10 @@
 const { Controller } = require('egg');
+const Result = require('../model/result')
 
 class BaseController extends Controller {
-  success(data) {
+  success(result) {
     this.ctx.status = 200
-    this.ctx.body = {
-      success: true,
-      msg: data.msg,
-      data: data.value
-    }
+    this.ctx.body = result
   }
 
   notFoundMsg(msg) {
