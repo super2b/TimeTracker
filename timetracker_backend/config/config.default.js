@@ -41,7 +41,7 @@ module.exports = appInfo => {
     enable: false,
   };
 
-
+  
   // use for cookie sign key, should change to your own and keep security
   config.keys = appInfo.name + '_1524406271246_2548';
   config.jwttoken = {

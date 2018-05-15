@@ -16,7 +16,7 @@ module.exports = app => {
   router.post('/signin', controller.user.signin)
 
   //获取任务列表
-  // router.get('/task', auth, controller.task.list)
+  router.get('/tasks', auth, controller.task.list)
   //创建任务
   router.post('/task', auth, controller.task.create);
   //获取任务详情
