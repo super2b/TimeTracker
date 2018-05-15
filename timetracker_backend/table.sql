@@ -3,7 +3,7 @@ create table task(
     u_id bigint(20) not null,
     t_name varchar(128) not null,
     t_desc varchar(512),
-    t_status int not null default '0',
+    t_status int not null default '0', -- 0 表示未开始，1 表示正在执行
     create_time datetime not null default now(),
     update_time datetime not null default now()
 ) DEFAULT CHARSET=utf8;

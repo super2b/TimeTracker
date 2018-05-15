@@ -5,9 +5,11 @@ const Controller = require('../core/base_controller');
 class TaskController extends Controller {
   async create() {
     const {ctx, service} = this;
-    var insertResult = await service.task.insert('研究Heroku', "Task from api")
-    ctx.body = insertResult;
-    ctx.status = 201;
+    const name = ctx.request.body.name
+    const desc = ctx.request.body.desc
+    var insertResult = await service.task.insert(ctx.current_user.u_id, name, desc)
+    ctx.body = insertResult
+    ctx.status = 200
   }
 
   async find() {

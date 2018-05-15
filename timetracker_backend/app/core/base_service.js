@@ -1,5 +1,6 @@
 const Service = require('egg').Service
 const crypto = require('crypto')
+const Result = require('../model/result')
 var fs = require('fs')
 var path = require('path')
 

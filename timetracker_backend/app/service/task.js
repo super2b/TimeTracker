@@ -1,14 +1,14 @@
-const Service = require('egg').Service;
-
+const Service = require('../core/base_service');
+const Result = require('../model/result')
 class TaskService extends Service {
 
-  async insert(name, desc) {
-    const result = await this.app.mysql.insert('task', {t_name: name, t_desc: desc})
-    console.log('result:' + result);
-    return {
-      'result': result.affectedRows === 1 ?"创建任务成功" : "创建失败",
-      'success': 'ture'
-    };
+  async insert(uid, name, desc) {
+    try {
+      const dbResult = await this.app.mysql.insert('task', {u_id: uid, t_name: name, t_desc: desc})
+      return new Result(true, "创建任务成功", {t_id: dbResult.insertId})
+    } catch (err) {
+      throw err
+    }
   }
 
   async find(tid) {
