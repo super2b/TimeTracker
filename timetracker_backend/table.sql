@@ -1,9 +1,19 @@
+create table time_record (
+    r_id bigint(20) primary key auto_increment,
+    t_id bigint(20) not null,
+    start_time datetime not null default now(),
+    end_time datetime not null default now(),
+    create_time datetime not null default now(),
+    update_time datetime not null default now()
+ ) DEFAULT CHARSET=utf8;
+
 create table task(
     t_id bigint(20) primary key auto_increment,
     u_id bigint(20) not null,
     t_name varchar(128) not null,
     t_desc varchar(512),
-    t_status int not null default '0', -- 0 表示未开始，1 表示正在执行
+    t_status int not null default '0', -- 0 表示未开始或者暂停，1 表示正在执行, 2表示已经结束
+    delete_flag int not null default '0', -- 0 表示未删除，1表示已经删除
     create_time datetime not null default now(),
     update_time datetime not null default now()
 ) DEFAULT CHARSET=utf8;
