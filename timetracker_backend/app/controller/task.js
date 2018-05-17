@@ -50,7 +50,7 @@ class TaskController extends Controller {
     const {ctx, service} = this
     const tid = ctx.params.tid
     
-    var result = await service.task.startTask(ctx.currrent_user.u_id, tid)
+    var result = await service.task.startTask(ctx.current_user.u_id, tid)
     ctx.body = result
     ctx.status = 200
   }
@@ -61,26 +61,20 @@ class TaskController extends Controller {
   async stopTask() {
     const {ctx, service} = this
     const tid = ctx.params.tid
-    // 更新task表里面task的状态 为 0
-
-    // 从redis获取该task的time_record id 为rid
-
-    // 将time_record里面rid={第二步取到的rid}更新end_time
-
-    // 返回客户端
+    var result = await service.task.stopTask(ctx.current_user.uid, tid)
+    ctx.body = result
+    ctx.status = 200
   }
 
   /**
    * 结束一个任务
    */
   async finishTask() {
-    // 更新task表里面task的状态 为 2
-
-    // 从redis获取该task的time_record id 为rid
-
-    // 将time_record里面rid={第二步取到的rid}更新end_time
-
-    // 返回客户端
+    const {ctx, service} = this
+    const tid = ctx.params.tid
+    var result = await service.task.finishTask(ctx.current_user.uid, tid)
+    ctx.body = result
+    ctx.status = 200
   }
 }
 
