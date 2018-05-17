@@ -82,8 +82,9 @@ class TaskController extends Controller {
 
   async elapse() {
     const {ctx} = this
-    // let d1 = moment().format('YYYY-MM-DD HH:mm:ss')
-    let d1 = moment('2018-05-17 00:25:00', 'YYYY-MM-DD HH:mm:ss')
+    let d3 = moment().format('YYYY-MM-DD HH:mm:ss')
+    let timeFormat = 'YYYY-MM-DD HH:mm:ss'
+    let d1 = moment('2018-05-15 00:25:00', timeFormat)
     let d2 = moment('2018-05-16 00:25:01', 'YYYY-MM-DD HH:mm:ss')
     let elapse = d1 - d2
     let totalSeconds = elapse / 1000
@@ -91,7 +92,7 @@ class TaskController extends Controller {
     let min = totalSeconds % 3600 / 60
     let second = totalSeconds % 3600 % 60
 
-    ctx.body = {"d1": d1, "d2": d2, "elapse": {"h": parseInt(hour), "min": parseInt(min), 's': parseInt(second)} }
+    ctx.body = {"d1": d1, "d2": d2, "d3": d3, "elapse": {"h": parseInt(hour), "min": parseInt(min), 's': parseInt(second)} }
     ctx.status = 200
   }
 }
