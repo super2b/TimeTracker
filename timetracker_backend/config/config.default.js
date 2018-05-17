@@ -11,7 +11,7 @@ module.exports = appInfo => {
     mysql: {
       client: {
         // host
-        host: '192.168.0.106',
+        host: '192.168.0.105',
         // 端口号
         port: '3306',
         // 用户名
@@ -29,7 +29,7 @@ module.exports = appInfo => {
     redis: {
       client: {
         port: 6379,
-        host: '192.168.0.106',
+        host: '192.168.0.105',
         password: '123456',
         db: 0
       }
@@ -51,6 +51,7 @@ module.exports = appInfo => {
 
   config.onerror = {
     all(err, ctx) {
+      console.log('the errrrrrrr' + err.status)
       // json hander
       if (ctx.status === 403) {
         ctx.body = { 

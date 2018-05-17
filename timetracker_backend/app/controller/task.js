@@ -48,9 +48,10 @@ class TaskController extends Controller {
    */
   async startTask() {
     const {ctx, service} = this
-    const tid = ctx.params.tid
+    const tid = ctx.request.body.tid
     
-    var result = await service.task.startTask(ctx.current_user.u_id, tid)
+    // var result = await service.task.startTask(ctx.current_user.u_id, tid)
+    var result = await service.task.startTask(11, tid)
     ctx.body = result
     ctx.status = 200
   }
@@ -60,8 +61,9 @@ class TaskController extends Controller {
    */
   async stopTask() {
     const {ctx, service} = this
-    const tid = ctx.params.tid
-    var result = await service.task.stopTask(ctx.current_user.uid, tid)
+    const tid = ctx.request.body.tid
+    // var result = await service.task.stopTask(ctx.current_user.u_id, tid)
+    var result = await service.task.stopTask(11, tid)
     ctx.body = result
     ctx.status = 200
   }
@@ -71,9 +73,17 @@ class TaskController extends Controller {
    */
   async finishTask() {
     const {ctx, service} = this
-    const tid = ctx.params.tid
-    var result = await service.task.finishTask(ctx.current_user.uid, tid)
+    const tid = ctx.request.body.tid
+    var result = await service.task.finishTask(ctx.current_user.u_id, tid)
     ctx.body = result
+    ctx.status = 200
+  }
+
+  async elapse() {
+    const {ctx} = this
+    let d1 = new Date().Format('yyyy-MM-dd HH:mm:ss')
+    let d2 = '2018-05-17T15:47:28.390Z'
+    ctx.body = {"d1": d1, "d2": d2 }
     ctx.status = 200
   }
 }
