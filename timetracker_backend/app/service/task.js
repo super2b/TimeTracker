@@ -49,12 +49,73 @@ class TaskService extends Service {
     return result
   }
 
+  /**
+   * 启动任务，首先要检查这个任务是否属于对应用户的，如果不是，则直接返回用户错误。
+   * 
+   * @param {int} uid 
+   * @param {int} tid 
+   */
   async startTask(uid, tid) {
-    // 更新task表里面task的状态 为 1
-
+    this.checkTask(uid, tid, 0)
     // 在time_record表添加一条记录，并将返回的id存入到redis里面
-
+    const timeRecord = await this.app.mysql.insert('time_record', {"t_id": tid, "start_time": Date.now()})
+    await this.app.redis.set(tid, {'start_time': Date.now(), 'status': 1, 'record_id': timeRecord.insertId})
     // 返回客户端
+    return new Result(true, '启动任务成功')
+  }
+
+  async stopTask(uid, tid) {
+    let storedTaskInfo = this.checkTask(uid, tid, 1)
+    if (storedTaskInfo.status === 2) {
+      throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
+    }
+    await this.app.mysql.update('time_record', 
+      {"record_id": storedTaskInfo.record_id}, {'end_time': Date.now})
+    await this.app.redis.set(tid, {'start_time': storedTaskInfo.start_time, 'status': 0, 'record_id': storedTaskInfo.record_id})
+    return new Result(true, '操作成功')  
+  }
+
+  /**
+   * 完成一个任务
+   * 完成任务的时候
+   * @param {int} uid 
+   * @param {int} tid 
+   */
+  async complete(uid, tid) {
+    let storedTaskInfo = this.checkTask(uid, tid, -1)
+    if (storedTaskInfo.status == 0) {
+      await this.app.mysql.update('time_record', 
+      {"record_id": storedTaskInfo.record_id}, {'end_time': storedTaskInfo.start_time})
+    } else if (storedTaskInfo.start_time == 1) {
+      await this.app.mysql.update('time_record', 
+      {"record_id": storedTaskInfo.record_id}, {'end_time': Date.now})
+    } else if (storedTaskInfo.status == 2) {
+      throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
+    }
+    await this.app.redis.set(tid, {'start_time': storedTaskInfo.start_time, 'status': 2, 'record_id': storedTaskInfo.record_id})
+    return new Result(true, '操作成功')  
+  }
+
+  /**
+   * 检查这个task是否归属于指定用户的
+   * @param {int} uid 用户id
+   * @param {int} tid task id
+   * @param {int} status 检查的状态不能为这个状态，如果负数的话表示忽略状态监测
+   */
+  async checkTask(uid, tid, status) {
+    const task = await this.find(uid, tid)
+    if (!task) {
+      throw new Error(403, "无权限进行此操作")
+    }
+
+    const storedTaskInfo = await this.redis.get(tid)
+    if (storedTaskInfo) {
+      if (status > 0 && storedTaskInfo.status != status) {
+        throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
+      }
+    }
+
+    return storedTaskInfo
   }
 }
 
