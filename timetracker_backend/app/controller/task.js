@@ -1,6 +1,7 @@
 'use strict';
 
 const Controller = require('../core/base_controller');
+const moment = require('moment')
 
 class TaskController extends Controller {
   /**
@@ -81,9 +82,16 @@ class TaskController extends Controller {
 
   async elapse() {
     const {ctx} = this
-    let d1 = new Date().Format('yyyy-MM-dd HH:mm:ss')
-    let d2 = '2018-05-17T15:47:28.390Z'
-    ctx.body = {"d1": d1, "d2": d2 }
+    // let d1 = moment().format('YYYY-MM-DD HH:mm:ss')
+    let d1 = moment('2018-05-17 00:25:00', 'YYYY-MM-DD HH:mm:ss')
+    let d2 = moment('2018-05-16 00:25:01', 'YYYY-MM-DD HH:mm:ss')
+    let elapse = d1 - d2
+    let totalSeconds = elapse / 1000
+    let hour = totalSeconds / 3600
+    let min = totalSeconds % 3600 / 60
+    let second = totalSeconds % 3600 % 60
+
+    ctx.body = {"d1": d1, "d2": d2, "elapse": {"h": parseInt(hour), "min": parseInt(min), 's': parseInt(second)} }
     ctx.status = 200
   }
 }
