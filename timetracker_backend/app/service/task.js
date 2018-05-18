@@ -42,20 +42,27 @@ class TaskService extends Service {
       offset: (pageno - 1) * pagesize,
       orders: [['update_time', 'desc']],
     })
+    console.log('the tasks:' + tasks.length)
     const totalCount = await this.app.mysql.count('task', {'u_id': uid});
     const data = {}
+    const updatedTaks = new Array(tasks.length);
     
     // 计算每个task所耗费的时间 根据redis里面的时间进行计算
-    for (t in tasks) {
-      cachedTask = await this.app.redis.get(t.t_id)
+    
+    for (var i =0; i < tasks.length; i++) {
+      let t = tasks[i]
+      console.log('loop the tasks:' + t.t_id)
+      let cachedTask = await this.app.redis.get(t.t_id)
+      console.log('cached task:' + cachedTask)
       if (cachedTask) {
         let endTime = 0
         let startTime = 0
-
+        cachedTask = JSON.parse(cachedTask)
+        console.log('the json parsed:' + cachedTask.status)
         // 如果为未开始或者已经结束的状态的话，直接去获取start_time和end_time
-        if (cachedTask.status === 0 || cachedTask === 2) {
-          endTime = cachedTask.end_time | moment()
-          startTime = moment(cachedTask.start_time, timeFormat) | moment()
+        if (cachedTask.status === 0 || cachedTask.status === 2) {
+          endTime = moment(cachedTask.end_time, timeFormat) || moment()
+          startTime = moment(cachedTask.start_time, timeFormat) || moment()
         } else if (cachedTask === 1) { // 任务进行中，则只要当前时间 - start_time
           endTime = moment()
           startTime = moment(cachedTask.start_time, timeFormat);
@@ -67,13 +74,15 @@ class TaskService extends Service {
         let min = totalSeconds % 3600 / 60
         let second = totalSeconds % 3600 % 60
         t.duration = {
-          "hour": hour,
-          "min":  min,
-          "second": second
+          "hour": parseInt(hour),
+          "min":  parseInt(min),
+          "second": parseInt(second)
         }
+        console.log('the t------->:' + t)
+        updatedTaks.push(t)
       }
     }
-    data.list = tasks
+    data.list = updatedTaks
     data.pageno = pageno
     data.pagesize = pagesize
     data.totalCount = totalCount
