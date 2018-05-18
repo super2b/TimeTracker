@@ -25,6 +25,7 @@ create table user(
     age int,
     first_name varchar(32),
     last_name varchar(32),
+    delete_flag int not null default '0',
     last_sign_at datetime not null default now(),
     create_time datetime not null default now(),
     update_time datetime not null default now()

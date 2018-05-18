@@ -11,7 +11,7 @@ module.exports = appInfo => {
     mysql: {
       client: {
         // host
-        host: '192.168.0.105',
+        host: '192.168.1.80',
         // 端口号
         port: '3306',
         // 用户名
@@ -29,7 +29,7 @@ module.exports = appInfo => {
     redis: {
       client: {
         port: 6379,
-        host: '192.168.0.105',
+        host: '192.168.1.80',
         password: '123456',
         db: 0
       }
@@ -46,7 +46,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1524406271246_2548';
   config.jwttoken = {
     expire_in_min: '10m',
-    expire_in_sec: 10 * 60
+    expire_in_sec: 100 * 60
   };
 
   config.onerror = {

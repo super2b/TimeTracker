@@ -1,5 +1,6 @@
 const Service = require('../core/base_service');
 const Result = require('../model/result')
+const moment = require('moment')
 let timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
 class TaskService extends Service {
@@ -92,7 +93,7 @@ class TaskService extends Service {
   async startTask(uid, tid) {
     await this.checkTask(uid, tid, 0)
     // 在time_record表添加一条记录，并将返回的id存入到redis里面
-    startTime = moment().format(timeFormat)
+    let startTime = moment().format(timeFormat)
     const timeRecord = await this.app.mysql.insert('time_record', {"t_id": tid, "start_time": startTime})
     let cachedTimeRecord = {}
     cachedTimeRecord.start_time = startTime
@@ -117,9 +118,11 @@ class TaskService extends Service {
     if (storedTaskInfo.status === 2) {
       throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
     }
-    endTime = moment().format(timeFormat)
-    await this.app.mysql.update('time_record', 
-      {"record_id": storedTaskInfo.record_id}, {'end_time': endTime})
+    let endTime = moment().format(timeFormat)
+    await this.app.mysql.update('time_record', {end_time: endTime},
+      {
+        where: { r_id: storedTaskInfo.record_id }
+      })
     storedTaskInfo.end_time = endTime
     storedTaskInfo.status = 0
     await this.app.redis.set(tid,JSON.stringify(storedTaskInfo))
@@ -132,19 +135,30 @@ class TaskService extends Service {
    * @param {int} uid 
    * @param {int} tid 
    */
-  async finish(uid, tid) {
+  async finishTask(uid, tid) {
     let storedTaskInfo = await this.checkTask(uid, tid, -1)
-    endTime = moment().format(timeFormat)
-    if (storedTaskInfo.status == 0) {// 没有开始就结束的任务
+    let endTime = moment().format(timeFormat)
+    console.log(storedTaskInfo.end_time)
+    if (storedTaskInfo.status == 0) {// 没有开始就结束的任务或者处于暂停状态的任务
       await this.app.mysql.update('time_record', 
-        {"record_id": storedTaskInfo.record_id}, {'end_time': storedTaskInfo.start_time})
+      // 如果redis里面没有end_time表示开始了未暂停过
+      { 'end_time': storedTaskInfo.end_time || storedTaskInfo.start_time },
+      {
+        where: { r_id: storedTaskInfo.record_id }
+      })
     } else if (storedTaskInfo.start_time == 1) { // 处于开始状态的任务直接进行结束操作
+      storedTaskInfo.end_time = endTime
       await this.app.mysql.update('time_record', 
-        {"record_id": storedTaskInfo.record_id}, {'end_time': endTime})
+        {'end_time': endTime},
+        {
+          where: { r_id: storedTaskInfo.record_id }
+        })
     } else if (storedTaskInfo.status == 2) { // 已经结束的任务再次进行结束操作
-      throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
+      let err = new Error("任务状态已经发生变更，请刷新页面获取最新状态")
+      err.status = 403
+      throw err
     }
-    storedTaskInfo.end_time = endTime
+    
     storedTaskInfo.status = 2
     await this.app.redis.set(tid, JSON.stringify(storedTaskInfo))
     return new Result(true, '操作成功')  
@@ -165,17 +179,18 @@ class TaskService extends Service {
       error.status = 403
       throw error
     }
-    const storedTaskInfo = await this.app.redis.get(tid)
-    console.log('the cached status:' + storedTaskInfo)
+    let storedTaskInfo = await this.app.redis.get(tid)
+    console.log('the cached task:' + storedTaskInfo + ", status:" + status)
     if (storedTaskInfo) {
+      storedTaskInfo = JSON.parse(storedTaskInfo)
       if (status >= 0 && storedTaskInfo.status != status) {
         const err = new Error('任务状态已经发生变更，请刷新页面获取最新状态');
         err.status = 403
         throw(err)
       }
-      return JSON.parse(storedTaskInfo)
+      return storedTaskInfo
     } 
-    return new Error(404, '任务状态异常')
+    return new Error(403, '不允许此操作')
   }
 }
 

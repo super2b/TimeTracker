@@ -51,8 +51,7 @@ class TaskController extends Controller {
     const {ctx, service} = this
     const tid = ctx.request.body.tid
     
-    // var result = await service.task.startTask(ctx.current_user.u_id, tid)
-    var result = await service.task.startTask(11, tid)
+    var result = await service.task.startTask(ctx.current_user.u_id, tid)
     ctx.body = result
     ctx.status = 200
   }
@@ -63,8 +62,7 @@ class TaskController extends Controller {
   async stopTask() {
     const {ctx, service} = this
     const tid = ctx.request.body.tid
-    // var result = await service.task.stopTask(ctx.current_user.u_id, tid)
-    var result = await service.task.stopTask(11, tid)
+    var result = await service.task.stopTask(ctx.current_user.u_id, tid)
     ctx.body = result
     ctx.status = 200
   }
