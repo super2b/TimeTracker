@@ -11,7 +11,6 @@ module.exports = () => {
       }
       return;
     }
-    console.log(authorization)
     const token = authorization.slice(7)
 
     const jwtToken = ctx.app.jwt.decode(token, ctx.app.config.jwt.secret);
@@ -20,13 +19,9 @@ module.exports = () => {
       err.status = 403
 
       throw(err)
-      // return;
     }
 
-    console.log('expire:' + jwtToken.exp + ", now:" + Date.now()/1000);
     const cachedToken = await ctx.app.redis.get(jwtToken._id);
-    console.log('token from header:' + token)
-    console.log('get the value from redis:' + cachedToken)
     if (!cachedToken || cachedToken !== token || jwtToken.exp < Date.now() / 1000) {
       const err = new Error('token错误或者已失效');
       err.status = 403

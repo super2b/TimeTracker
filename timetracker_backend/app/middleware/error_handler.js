@@ -12,7 +12,6 @@ module.exports = () => {
     } else if (ctx.status == 403) {
       ctx.status = 403
       let result = new Result(false, error.msg)
-      console.log('--------> error 403')
     }
   };
 };

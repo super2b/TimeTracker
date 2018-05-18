@@ -33,6 +33,9 @@ module.exports = appInfo => {
         password: '123456',
         db: 0
       }
+    },
+    logger: {
+      consoleLevel: 'DEBUG'
     }
   };
 
@@ -51,7 +54,6 @@ module.exports = appInfo => {
 
   config.onerror = {
     all(err, ctx) {
-      console.log('the errrrrrrr' + err.status)
       // json hander
       if (ctx.status === 403) {
         ctx.body = { 

@@ -1,6 +1,6 @@
 create table time_record (
-    r_id bigint(20) primary key auto_increment,
-    t_id bigint(20) not null,
+    r_id varchar(64) primary key,
+    t_id varchar(64) not null,
     start_time datetime not null default now(),
     end_time datetime not null default now(),
     create_time datetime not null default now(),
@@ -8,8 +8,8 @@ create table time_record (
  ) DEFAULT CHARSET=utf8;
 
 create table task(
-    t_id bigint(20) primary key auto_increment,
-    u_id bigint(20) not null,
+    t_id varchar(64) primary key,
+    u_id varchar(64) not null,
     t_name varchar(128) not null,
     t_desc varchar(512),
     t_status int not null default '0', -- 0 表示未开始或者暂停，1 表示正在执行, 2表示已经结束
@@ -19,8 +19,8 @@ create table task(
 ) DEFAULT CHARSET=utf8;
 
 create table user(
-    u_id bigint(20) primary key auto_increment,
-    name varchar(32),
+    u_id varchar(64) primary key,
+    name varchar(64),
     hashed_password varchar(128),
     age int,
     first_name varchar(32),

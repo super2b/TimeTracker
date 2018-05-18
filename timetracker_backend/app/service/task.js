@@ -1,9 +1,11 @@
 const Service = require('../core/base_service');
 const Result = require('../model/result')
 const moment = require('moment')
+const uuid = require('uuid/v4')
 let timeFormat = 'YYYY-MM-DD HH:mm:ss'
 
 class TaskService extends Service {
+
   /**
    * 添加一条任务
    * @param {int} uid 用户id
@@ -12,8 +14,9 @@ class TaskService extends Service {
    */
   async insert(uid, name, desc) {
     try {
-      const dbResult = await this.app.mysql.insert('task', {u_id: uid, t_name: name, t_desc: desc})
-      return new Result(true, "创建任务成功", {t_id: dbResult.insertId})
+      let tid = uuid().split('-').join('')
+      const dbResult = await this.app.mysql.insert('task', {t_id: tid,u_id: uid,  t_name: name, t_desc: desc})
+      return new Result(true, "创建任务成功", {t_id: tid})
     } catch (err) {
       throw err
     }
@@ -26,6 +29,11 @@ class TaskService extends Service {
    */
   async find(uid, tid) {
     const task = await this.app.mysql.get('task', {'t_id': tid, 'u_id': uid})
+    if (!task) {
+      let err = new Error('任务不存在或者已删除')
+      err.status = 403
+      throw(err)
+    }
     return task;
   }
 
@@ -36,29 +44,27 @@ class TaskService extends Service {
    * @param {int} pagesize 页长
    */
   async list(uid, pageno, pagesize) {
+    const {logger} = this.app
     const tasks = await this.app.mysql.select('task', {
       where: {'u_id': uid},
       limit: Number(pagesize),
       offset: (pageno - 1) * pagesize,
       orders: [['update_time', 'desc']],
     })
-    console.log('the tasks:' + tasks.length)
+    logger.info('the tasks existed in mysql db: %s', tasks.length)
     const totalCount = await this.app.mysql.count('task', {'u_id': uid});
     const data = {}
     const updatedTaks = new Array();
     
     // 计算每个task所耗费的时间 根据redis里面的时间进行计算
-    
+    logger.info('start to loop the tasks')
     for (var i =0; i < tasks.length; i++) {
       let t = tasks[i]
-      console.log('loop the tasks:' + t.t_id)
       let cachedTask = await this.app.redis.get(t.t_id)
-      console.log('cached task:' + cachedTask)
       if (cachedTask) {
         let endTime = 0
         let startTime = 0
         cachedTask = JSON.parse(cachedTask)
-        console.log('the json parsed:' + cachedTask.status)
         // 如果为未开始或者已经结束的状态的话，直接去获取start_time和end_time
         if (cachedTask.status === 0 || cachedTask.status === 2) {
           endTime = moment(cachedTask.end_time, timeFormat) || moment()
@@ -78,7 +84,6 @@ class TaskService extends Service {
           "min":  parseInt(min),
           "second": parseInt(second)
         }
-        console.log('the t------->:' + t)
         updatedTaks.push(t)
       }
     }
@@ -100,14 +105,14 @@ class TaskService extends Service {
    * @param {int} tid 任务id
    */
   async startTask(uid, tid) {
-    await this.checkTask(uid, tid, 0)
+    let cachedTimeRecord = await this.checkTask(uid, tid, 0)
     // 在time_record表添加一条记录，并将返回的id存入到redis里面
     let startTime = moment().format(timeFormat)
-    const timeRecord = await this.app.mysql.insert('time_record', {"t_id": tid, "start_time": startTime})
-    let cachedTimeRecord = {}
-    cachedTimeRecord.start_time = startTime
+    let rid = uuid().split('-').join('')
+    const timeRecord = await this.app.mysql.insert('time_record', {"r_id": rid, "t_id": tid, "start_time": startTime})
+    cachedTimeRecord.start_time = cachedTimeRecord.start_time||startTime
     cachedTimeRecord.status = 1
-    cachedTimeRecord.record_id = timeRecord.insertId
+    cachedTimeRecord.record_id = rid
     await this.app.redis.set(tid, JSON.stringify(cachedTimeRecord))
     // 返回客户端
     return new Result(true, '启动任务成功')
@@ -123,7 +128,6 @@ class TaskService extends Service {
    */
   async stopTask(uid, tid) {
     let storedTaskInfo = await this.checkTask(uid, tid, 1)
-    console.log('the cached task info:' + storedTaskInfo.tostring)
     if (storedTaskInfo.status === 2) {
       throw new Error(403, "任务状态已经发生变更，请刷新页面获取最新状态")
     }
@@ -145,9 +149,9 @@ class TaskService extends Service {
    * @param {int} tid 
    */
   async finishTask(uid, tid) {
+    const {logger} = this.app
     let storedTaskInfo = await this.checkTask(uid, tid, -1)
     let endTime = moment().format(timeFormat)
-    console.log(storedTaskInfo.end_time)
     if (storedTaskInfo.status == 0) {// 没有开始就结束的任务或者处于暂停状态的任务
       await this.app.mysql.update('time_record', 
       // 如果redis里面没有end_time表示开始了未暂停过
@@ -155,7 +159,7 @@ class TaskService extends Service {
       {
         where: { r_id: storedTaskInfo.record_id }
       })
-    } else if (storedTaskInfo.start_time == 1) { // 处于开始状态的任务直接进行结束操作
+    } else if (storedTaskInfo.status == 1) { // 处于开始状态的任务直接进行结束操作
       storedTaskInfo.end_time = endTime
       await this.app.mysql.update('time_record', 
         {'end_time': endTime},
@@ -181,15 +185,12 @@ class TaskService extends Service {
    */
   async checkTask(uid, tid, status) {
     const task = await this.find(uid, tid)
-    console.log('uid:' + uid + ", tid:" + tid)
-    console.log('the task:--->' + (!task))
     if (!task) {
       let error = new Error('无权限进行此操作')
       error.status = 403
       throw error
     }
     let storedTaskInfo = await this.app.redis.get(tid)
-    console.log('the cached task:' + storedTaskInfo + ", status:" + status)
     if (storedTaskInfo) {
       storedTaskInfo = JSON.parse(storedTaskInfo)
       if (status >= 0 && storedTaskInfo.status != status) {

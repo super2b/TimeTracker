@@ -5,11 +5,11 @@ class UserController extends Controller {
    * Sign up.
    */ 
   async signup() {
-    const {ctx, service} = this
+    const {ctx, logger, service} = this
     const name = ctx.request.body.name
     const password = ctx.request.body.password
+    logger.debug('signup --> username:' + name)
     const result = await service.user.createUser(name, password)
-    
     ctx.body = result
     ctx.status = 200
   }
