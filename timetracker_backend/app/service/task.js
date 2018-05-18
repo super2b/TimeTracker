@@ -45,7 +45,7 @@ class TaskService extends Service {
     console.log('the tasks:' + tasks.length)
     const totalCount = await this.app.mysql.count('task', {'u_id': uid});
     const data = {}
-    const updatedTaks = new Array(tasks.length);
+    const updatedTaks = new Array();
     
     // 计算每个task所耗费的时间 根据redis里面的时间进行计算
     

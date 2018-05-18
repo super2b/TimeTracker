@@ -35,9 +35,9 @@ class TaskController extends Controller {
   async list() {
     const {ctx, service} = this
     // page no
-    const pageNo = ctx.query.pageno | 1
+    const pageNo = ctx.query.pageno || 1
     // page size
-    const pageSize =  ctx.query.pagesize | 2
+    const pageSize =  ctx.query.pagesize || 2
 
     var result = await service.task.list(ctx.current_user.u_id, pageNo, pageSize)
     ctx.body = result
