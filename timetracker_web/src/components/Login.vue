@@ -17,6 +17,16 @@
 <script>
 import httpclient from '../httpclient.js'
 import qs from 'qs'
+import { JSEncrypt } from 'jsencrypt'
+
+var encrypt = new JSEncrypt()
+encrypt.setPublicKey(`-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDbmDBiBLkPC6Vr39XYoZz9JSdB
+nDtw8EXutQJ8zOQ/k3MIAG3LMD/d8ETyR9HILwpbMOVyx7CUK0479ItD1stUcfKK
+/hawjD11xw3lMYamAXAINWDTPJwQ55QdNGrvFEbQe819Wm762sPQ+Z5kvHVQ9CAa
+k90Qtgp+prPfF2CgFwIDAQAB
+-----END PUBLIC KEY-----`)
+
 export default {
   name: 'Login',
   data () {
@@ -31,17 +41,19 @@ export default {
     async login () {
       if (this.account !== '' && this.password !== '') {
         console.log('do login....')
-        var data = qs.stringify({'name': this.account, 'password': this.password})
+        let encryptedPassword = encrypt.encrypt(this.password)
+        console.log('the encryptedPassword:' + encryptedPassword)
+        var data = qs.stringify({'name': this.account, 'password': encryptedPassword})
         const loginResult = await httpclient.post('/signin', data)
-        const result = loginResult.data
+        // const result = loginResult.data
         console.log(loginResult.data)
-        if (result.success) {
-          let expireDays = 1000 * 60 * 60 * 24 * 15
-          this.setCookie('username', this.account, expireDays)
-          this.$router.replace('/home')
-          // 登录成功后
-          this.$router.go(0)
-        }
+        // if (result.success) {
+        //   let expireDays = 1000 * 60 * 60 * 24 * 15
+        //   this.setCookie('username', this.account, expireDays)
+        //   this.$router.replace('/home')
+        //   // 登录成功后
+        //   this.$router.go(0)
+        // }
       }
     },
 
