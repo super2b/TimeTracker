@@ -1,21 +1,33 @@
+'use strict';
+
 const { Controller } = require('egg');
-const Result = require('../model/result')
 
 class BaseController extends Controller {
+  /**
+   * success callback
+   * @param {object} result the reuslt object.
+   */
   success(result) {
-    this.ctx.status = 200
-    this.ctx.body = result
+    this.ctx.status = 200;
+    this.ctx.body = result;
   }
 
+  /**
+   * not found msg
+   * @param {string} msg the error msg.
+   */
   notFoundMsg(msg) {
-    msg = msg || 'not found'
-    this.ctx.throw(404, msg)
+    const finalMsg = msg || 'not found';
+    this.ctx.throw(404, finalMsg);
   }
 
+  /**
+   * UnAuth error.
+   */
   unAuth() {
-    msg = 'unauthor',
-    this.ctx.throw(403, msg)
+    const msg = 'unauthor';
+    this.ctx.throw(403, msg);
   }
 }
 
-module.exports = BaseController
+module.exports = BaseController;
