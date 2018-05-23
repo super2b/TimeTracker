@@ -47,13 +47,13 @@ export default {
         const loginResult = await httpclient.post('/signin', data)
         // const result = loginResult.data
         console.log(loginResult.data)
-        // if (result.success) {
-        //   let expireDays = 1000 * 60 * 60 * 24 * 15
-        //   this.setCookie('username', this.account, expireDays)
-        //   this.$router.replace('/home')
-        //   // 登录成功后
-        //   this.$router.go(0)
-        // }
+        if (loginResult.data.success) {
+          let expireDays = 1000 * 60 * 60 * 24 * 15
+          this.setCookie('username', this.account, expireDays)
+          this.$router.replace('/home')
+          // 登录成功后
+          this.$router.go(0)
+        }
       }
     },
 

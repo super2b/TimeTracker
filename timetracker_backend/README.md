@@ -36,7 +36,7 @@ $ npm stop
 
 ### mysql
 #### 设置远程ip地址访问：
-1. 找到mysql的配置文件，将内容中的 bind-address=127.0.0.1
+1. 找到mysql的配置文件，将内容中的 bind-address=127.0.0.1 注释
 不同的版本或者系统可能存的位置也不一样：
 以ubuntu16.04+mysql 5.7.22 存储的位置在    `/etc/mysql/mysql.conf.d`
 
