@@ -1,9 +1,11 @@
+'use strict';
+
 class Result {
   constructor(success, msg, data) {
-    this.success = success
-    this.msg = msg
-    this.data = data
+    this.success = success;
+    this.msg = msg;
+    this.data = data;
   }
 }
 
-module.exports = Result
+module.exports = Result;

@@ -1,8 +1,10 @@
+'use strict';
+
 const Service = require('../core/base_service');
-const Result = require('../model/result')
-const moment = require('moment')
-const uuid = require('uuid/v4')
-let timeFormat = 'YYYY-MM-DD HH:mm:ss'
+const Result = require('../model/result');
+const moment = require('moment');
+const uuid = require('uuid/v4');
+const timeFormat = 'YYYY-MM-DD HH:mm:ss';
 
 class TaskService extends Service {
 
@@ -14,11 +16,16 @@ class TaskService extends Service {
    */
   async insert(uid, name, desc) {
     try {
-      let tid = uuid().split('-').join('')
-      const dbResult = await this.app.mysql.insert('task', {t_id: tid,u_id: uid,  t_name: name, t_desc: desc})
-      return new Result(true, "创建任务成功", {t_id: tid})
+      let tid = uuid().split('-').join('');
+      const dbResult = await this.app.mysql.insert('task', 
+        {
+          t_id: tid,u_id: uid,
+          t_name: name, 
+          t_desc: desc
+        });
+      return new Result(true, "创建任务成功", { t_id: tid });
     } catch (err) {
-      throw err
+      throw err;
     }
   }
 
@@ -28,7 +35,7 @@ class TaskService extends Service {
    * @param {int} tid 任务id
    */
   async find(uid, tid) {
-    const task = await this.app.mysql.get('task', {'t_id': tid, 'u_id': uid})
+    const task = await this.app.mysql.get('task', {'t_id': tid, 'u_id': uid});
     if (!task) {
       let err = new Error('任务不存在或者已删除')
       err.status = 403
