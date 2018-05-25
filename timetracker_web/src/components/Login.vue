@@ -2,12 +2,12 @@
 <div class="login" id="login">
     <a href="javascript:;" class="log-close"><i class="icons close"></i></a>
     <h4 style="margin: 0px 0px 20px; text-align: center; color: rgb(48, 128, 254); letter-spacing: 12px; margin-top:40px">登录</h4>
-    <div align="center" invisible class="login-failed">
+    <div centered :class="'login_failed ' + (loginFailed == ''? 'invisible': '')">
         用户名或者密码错误
     </div>
     <div class="log-email">
-        <input type="text" placeholder="Email" :class="'log-input' + (account==''?' log-input-empty':'')" v-model="account">
-        <input type="password" placeholder="Password" :class="'log-input' + (password==''?' log-input-empty':'')"  v-model="password">
+        <input type="text" @focus="hideError" placeholder="Email" :class="'log-input' + (account==''?' log-input-empty':'')" v-model="account">
+        <input type="password" @focus="hideError" placeholder="Password" :class="'log-input' + (password==''?' log-input-empty':'')"  v-model="password">
         <a href="javascript:;" class="log-btn" @click="login">登录</a>
     </div>
     <div class="next-row tips" style="text-align: center; margin-bottom:40px">
@@ -37,8 +37,8 @@ export default {
       isLoging: false,
       account: '',
       password: '',
-      show: hidden,
-      dismissCountDown: 0
+      dismissCountDown: 0,
+      loginFailed: ''
     }
   },
   methods: {
@@ -55,11 +55,14 @@ export default {
         if (loginResult.data.success) {
           let expireDays = 1000 * 60 * 60 * 24 * 15
           this.setCookie('username', this.account, expireDays)
+          this.setCookie('userToken', loginResult.data.token, expireDays)
           this.$router.replace('/home')
           // 登录成功后
           this.$router.go(0)
+          this.loginFailed = false
         } else {
           this.dismissCountDown = 3
+          this.loginFailed = true
         }
       }
     },
@@ -109,6 +112,9 @@ export default {
     },
     showAlert () {
       this.dismissCountDown = this.dismissCountDown
+    },
+    hideError () {
+      this.loginFailed = false
     }
   }
 }
@@ -120,6 +126,7 @@ export default {
 -ms-border-radius: 5px;
 -o-border-radius: 5px;
 border-radius: 5px; -webkit-box-shadow:  0px 3px 16px -5px #070707; box-shadow:  0px 3px 16px -5px #070707}
+.login_failed{color:#e45649; width:370px; text-align:center; float: none; margin: 0 auto}
 .log-close{display: block; position: absolute; top:12px; right: 12px; opacity: 1;}
 .log-close:hover .icons{transform: rotate(180deg);}
 .log-close .icons{opacity: 1; transition: all .3s}
