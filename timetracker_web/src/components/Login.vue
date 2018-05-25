@@ -55,7 +55,8 @@ export default {
         if (loginResult.data.success) {
           let expireDays = 1000 * 60 * 60 * 24 * 15
           this.setCookie('username', this.account, expireDays)
-          this.setCookie('userToken', loginResult.data.token, expireDays)
+          this.setCookie('userToken', loginResult.data.msg.token, expireDays)
+          httpclient.refreshUserToken()
           this.$router.replace('/home')
           // 登录成功后
           this.$router.go(0)

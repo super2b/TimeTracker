@@ -49,8 +49,17 @@ axios.interceptors.response.use(response => {
   return Promise.resolve(error.response)
 })
 
+function getCookie (name) {
+  var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'))
+  if (match) {
+    return match[2]
+  } else {
+    return null
+  }
+}
+
 axios.defaults.baseURL = 'http://localhost:7001'
-axios.defaults.headers.common['Authorization'] = '1234234234234'
+axios.defaults.headers.common['Authorization'] = 'bearer ' + getCookie('userToken')
 axios.defaults.timeout = 10000
 
 export default {
@@ -77,5 +86,9 @@ export default {
         resolve(res)
       })
     })
+  },
+  refreshUserToken () {
+    console.log('executed refreshUserToken.....')
+    axios.defaults.headers.common['Authorization'] = 'bearer ' + getCookie('userToken')
   }
 }

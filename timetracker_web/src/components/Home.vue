@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin-bottom: 20px" >
+    <div style="margin-bottom: 20px; margin-top: 60px" >
       <div>
        <b-form-input id="textarea1"
             v-model="text"
@@ -32,16 +32,14 @@
 </template>
 <script>
 import Const from './Constant'
+import httpclient from '../httpclient.js'
+import qs from 'qs'
 export default {
   name: 'FAExample',
   data () {
     return {
       columns: Const.COLUMNS,
-      tasks: [
-        {title: 'Android组件化', state: Const.STATES.STOPPED, url: 'https://blog.csdn.net/guiying712/article/details/78057120'},
-        {title: 'Android 动态代理和AOP', state: Const.STATES.STOPPED},
-        {title: 'Android包结构详解', state: Const.STATES.STOPPED},
-        {title: 'ARouter代码阅读', state: Const.STATES.STOPPED}],
+      tasks: [],
       size: 'sm',
       variant: 'primary',
       formstate: '',
@@ -61,7 +59,7 @@ export default {
       console.log('the length:' + res)
       return len > 0 ? Math.max(res, 1) : res
     },
-    postTask: function () {
+    async postTask () {
       if (!this.text) {
         var self = this
         self.formstate = 'invalid'
@@ -69,12 +67,18 @@ export default {
         setTimeout(function () {
           self.formstate = ''
           self.formplaceholder = '输入任务内容'
-          console.log('2000laterrrrr')
         }, 2000)
       } else {
-        this.formstate = ''
-        this.tasks.unshift({title: this.text, state: Const.STATES.STOPPED})
-        this.text = ''
+        const data = qs.stringify({'name': this.text, 'desc': 'from webclient'})
+        const postResult = await httpclient.post('/task', data)
+        /*
+         * 发布成功，则将本地输入的信息清空，并且添加一个card内容
+         */
+        if (postResult.data.success) {
+          this.formstate = ''
+          this.tasks.unshift({title: this.text, state: Const.STATES.STOPPED})
+          this.text = ''
+        }
       }
     }
   }
