@@ -2,6 +2,9 @@
 <div class="login" id="login">
     <a href="javascript:;" class="log-close"><i class="icons close"></i></a>
     <h4 style="margin: 0px 0px 20px; text-align: center; color: rgb(48, 128, 254); letter-spacing: 12px; margin-top:40px">登录</h4>
+    <div align="center" invisible class="login-failed">
+        用户名或者密码错误
+    </div>
     <div class="log-email">
         <input type="text" placeholder="Email" :class="'log-input' + (account==''?' log-input-empty':'')" v-model="account">
         <input type="password" placeholder="Password" :class="'log-input' + (password==''?' log-input-empty':'')"  v-model="password">
@@ -33,7 +36,9 @@ export default {
     return {
       isLoging: false,
       account: '',
-      password: ''
+      password: '',
+      show: hidden,
+      dismissCountDown: 0
     }
   },
   methods: {
@@ -53,6 +58,8 @@ export default {
           this.$router.replace('/home')
           // 登录成功后
           this.$router.go(0)
+        } else {
+          this.dismissCountDown = 3
         }
       }
     },
@@ -96,6 +103,12 @@ export default {
       //   // 登录成功后
       //   this.$router.go(0)
       // }, 1000)
+    },
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
+    },
+    showAlert () {
+      this.dismissCountDown = this.dismissCountDown
     }
   }
 }
@@ -132,7 +145,8 @@ position: relative;}
 .log-btn.email{background-color: #50E3CE}
 .log-btn:hover,.log-btn:focus{color: #fff; opacity: .8;}
 
-.log-email{text-align: center; margin-top: 40px;}
+.login-failed{text-align: center; width: 370px; color: #a94442}
+.log-email{text-align: center; margin-top: 20px;}
 .log-email .log-btn{background-color: #007bff;text-align: center;}
 .log-input-empty{border: 1px solid #f37474 !important;}
 .isloading{background: #d6d6d6}
