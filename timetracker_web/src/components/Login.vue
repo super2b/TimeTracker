@@ -66,53 +66,6 @@ export default {
         }
       }
     },
-
-    // 登录请求
-    async doLogin (account, password) {
-      // 一般要跟后端了解密码的加密规则
-      // 这里例子用的哈希算法来自./js/sha1.min.js
-      // let passwordSha = hex_sha1(hex_sha1(this.password))
-
-      // 需要想后端发送的登录参数
-      // let loginParam = {
-      //   account: this.account,
-      //   password_sha
-      // }
-      var data = qs.stringify({'name': 'leiweibo111', 'password': '123456'})
-      // var vm = this
-      // axios.post('/signin', data)
-      //   .then(function (res) {
-      //     console.log('the response:' + res.data.msg)
-      //     let expireDays = 1000 * 60 * 60 * 24 * 15
-      //     vm.setCookie('username', account, expireDays)
-      //     vm.isLoging = false
-      //     // vm.$router.replace('/home')
-      //     // 登录成功后
-      //     // vm.$router.go(0)
-      //   }).catch(function (err) {
-      //     console.log(err, '------------错误')
-      //   })
-      const loginResult = await httpclient.post('/signin', data)
-      console.log(loginResult.data)
-      // 设置在登录状态
-      // this.isLoging = true
-      // // 演示用
-      // setTimeout(() => {
-      // // 登录状态15天后过期
-      //   let expireDays = 1000 * 60 * 60 * 24 * 15
-      //   this.setCookie('username', this.account, expireDays)
-      //   this.isLoging = false
-      //   this.$router.replace('/home')
-      //   // 登录成功后
-      //   this.$router.go(0)
-      // }, 1000)
-    },
-    countDownChanged (dismissCountDown) {
-      this.dismissCountDown = dismissCountDown
-    },
-    showAlert () {
-      this.dismissCountDown = this.dismissCountDown
-    },
     hideError () {
       this.loginFailed = false
     }
