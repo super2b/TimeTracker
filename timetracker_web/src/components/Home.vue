@@ -47,7 +47,21 @@ export default {
       formplaceholder: '输入任务内容'
     }
   },
+  mounted () {
+    this.getTaskList(1, 21)
+  },
   methods: {
+    async getTaskList (pageNo, pageSize) {
+      const params = qs.stringify({pageno: pageNo, pagesize: pageSize})
+      console.log('the get task params:' + params)
+      const taskListResult = await httpclient.get('/tasks', {pageno: pageNo, pagesize: pageSize})
+      console.log('the taskListResult:' + taskListResult.data.value.list[0].t_name)
+      const dataList = taskListResult.data.value.list
+      for (let index in dataList) {
+        this.tasks.unshift({title: dataList[dataList.length - 1 - index].t_name, state: Const.STATES.STOPPED})
+      }
+    },
+    // 计算任务的长度来展示任务列表
     taskRowLength: function (ts) {
       var len = ts.length
       var res = 0
@@ -59,6 +73,7 @@ export default {
       console.log('the length:' + res)
       return len > 0 ? Math.max(res, 1) : res
     },
+    // 发布一个任务
     async postTask () {
       if (!this.text) {
         var self = this

@@ -78,8 +78,8 @@ export default {
   data () {
     return {
       hour: 0,
-      minute: Const.RESTING_TIME_LENGTH_IN_MINUTES,
-      second: Const.WORKING_TIME_LENGTH_IN_SECONDS
+      minute: 0,
+      second: 0
     }
   },
   methods: {
@@ -107,8 +107,8 @@ export default {
     },
     stop: function () {
       clearInterval(this.interval)
-      this.minute = Const.RESTING_TIME_LENGTH_IN_MINUTES
-      this.second = Const.WORKING_TIME_LENGTH_IN_SECONDS
+      this.minute = 0
+      this.second = 0
       this.data[this.index].state = Const.STATES.STOPPED
     },
     deleteTask: function () {

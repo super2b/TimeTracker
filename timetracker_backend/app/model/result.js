@@ -4,7 +4,7 @@ class Result {
   constructor(success, msg, data) {
     this.success = success;
     this.msg = msg;
-    this.data = data;
+    this.value = data;
   }
 }
 

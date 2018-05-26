@@ -96,5 +96,6 @@ export default {
   .tt_notification  {
     padding: 10px;
     margin: 0;
+    font-size: 14px;
   }
 </style>

@@ -91,9 +91,16 @@ class TaskService extends Service {
           "min":  parseInt(min),
           "second": parseInt(second)
         }
-        updatedTaks.push(t)
+      } else {
+        t.duration = {
+          "hour": 0,
+          "min":  0,
+          "second": 0
+        }
       }
+      updatedTaks.push(t)
     }
+    logger.info('the updated task list:' + updatedTaks.length)
     data.list = updatedTaks
     data.pageno = pageno
     data.pagesize = pagesize
