@@ -9,10 +9,12 @@ import Loading from '@/components/loading'
 import Card from '@/components/card'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import Notifications from 'vue-notification'
 
 Vue.use(BootstrapVue)
 Vue.use(Loading)
 Vue.use(Card)
+Vue.use(Notifications)
 Vue.config.productionTip = false
 
 // 设置cookie,增加到vue实例方便全局调用

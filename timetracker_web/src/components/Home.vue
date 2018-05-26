@@ -71,6 +71,7 @@ export default {
       } else {
         const data = qs.stringify({'name': this.text, 'desc': 'from webclient'})
         const postResult = await httpclient.post('/task', data)
+        console.log('post result:' + postResult)
         /*
          * 发布成功，则将本地输入的信息清空，并且添加一个card内容
          */
@@ -78,6 +79,12 @@ export default {
           this.formstate = ''
           this.tasks.unshift({title: this.text, state: Const.STATES.STOPPED})
           this.text = ''
+          this.$notify({
+            group: 'foo',
+            title: 'Success!!!',
+            width: '100%',
+            text: 'Hello user! This is a notification!'
+          })
         }
       }
     }
